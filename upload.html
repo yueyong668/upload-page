@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Financial Crimes Enforcement Network - Document Upload</title>
+<style>
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f6f8fa;
+    margin: 0;
+    padding: 0;
+    color: #222;
+  }
+
+  header {
+    background-color: #0b2e58;
+    color: white;
+    padding: 1.5rem 2rem;
+    border-bottom: 4px solid #c8102e;
+    text-align: center;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+
+  header p {
+    margin: 0.3rem 0 0 0;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  main {
+    max-width: 600px;
+    margin: 3rem auto;
+    background: white;
+    padding: 2.5rem 3rem;
+    border: 1px solid #d3d7db;
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgb(0 0 0 / 0.1);
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  /* Hide native file input */
+  #fileInput {
+    display: none;
+  }
+
+  /* Custom file select button */
+  #customBtn {
+    background-color: #0b2e58;
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  #customBtn:hover,
+  #customBtn:focus {
+    background-color: #092748;
+    outline: none;
+  }
+
+  #fileName {
+    margin-left: 12px;
+    font-style: italic;
+    color: #444;
+    vertical-align: middle;
+  }
+
+  button#submitBtn {
+    background-color: #0b2e58;
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  button#submitBtn:hover,
+  button#submitBtn:focus {
+    background-color: #092748;
+    outline: none;
+  }
+
+  .preview {
+    margin-top: 1.5rem;
+    max-width: 100%;
+    max-height: 350px;
+    display: none;
+    border: 1px solid #d3d7db;
+    border-radius: 4px;
+    object-fit: contain;
+  }
+
+  .message {
+    margin-top: 1rem;
+    font-style: italic;
+    color: #444;
+    text-align: center;
+  }
+
+  footer {
+    text-align: center;
+    color: #777;
+    font-size: 0.85rem;
+    margin: 4rem 0 2rem 0;
+  }
+
+  footer a {
+    color: #0b2e58;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  footer a:hover,
+  footer a:focus {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Financial Crimes Enforcement Network (FinCEN)</h1>
+  <p>U.S. Department of the Treasury</p>
+</header>
+
+<main>
+  <h2>Upload Identification Document</h2>
+  
+  <label for="fileInput" style="font-weight: 600; display:block; margin-bottom: 0.5rem;">
+    Select a file (JPEG, PNG, or PDF):
+  </label>
+  
+  <!-- Hidden native input -->
+  <input type="file" id="fileInput" accept="image/jpeg,image/png,application/pdf" />
+  
+  <button type="button" id="customBtn" aria-label="Choose file">Choose File</button>
+  <span id="fileName" aria-live="polite" aria-atomic="true">No file chosen</span>
+
+  <button id="submitBtn" type="button" aria-label="Upload file">Upload</button>
+
+  <img id="preview" class="preview" alt="Document Preview" />
+  <p class="message" id="message" role="alert"></p>
+</main>
+
+<footer>
+  &copy; 2025 Financial Crimes Enforcement Network | Department of the Treasury<br />
+  Official Website: <a href="https://www.fincen.gov" target="_blank" rel="noopener noreferrer">https://www.fincen.gov</a>
+</footer>
+
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const customBtn = document.getElementById('customBtn');
+  const fileName = document.getElementById('fileName');
+  const preview = document.getElementById('preview');
+  const message = document.getElementById('message');
+  const submitBtn = document.getElementById('submitBtn');
+
+  // Open native file picker when custom button clicked
+  customBtn.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  // Update displayed file name and preview image if applicable
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      fileName.textContent = file.name;
+
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = 'none';
+        preview.src = '';
+      }
+      message.textContent = '';
+    } else {
+      fileName.textContent = 'No file chosen';
+      preview.style.display = 'none';
+      preview.src = '';
+      message.textContent = '';
+    }
+  });
+
+  // Simulate upload process
+  submitBtn.addEventListener('click', () => {
+    if (fileInput.files.length === 0) {
+      message.textContent = 'Please select a file before submitting.';
+      preview.style.display = 'none';
+      preview.src = '';
+      return;
+    }
+    const file = fileInput.files[0];
+    message.textContent = `File "${file.name}" is ready for submission (local preview only).`;
+  });
+</script>
+
+</body>
+</html>
